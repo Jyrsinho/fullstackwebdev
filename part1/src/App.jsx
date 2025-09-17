@@ -1,25 +1,15 @@
+import {useState} from 'react'
 
+const App = (props) => {
+    const [counter, setCounter] = useState(0);
 
-const Hello =(props) => {
-    console.log(props)
-    return (
-       <p>Hello {props.name} you are {props.age} old.</p>
-    )
-}
+    setTimeout(() => setCounter(counter + 1), 1000);
 
-const App = () => {
-    const nimi = "Pekka";
-    const ika = 10;
+    console.log(`rendering ${counter}`);
 
     return (
-        <>
-            <h1>Greetings</h1>
-            <Hello name="Kalle" age={10}/>
-            <Hello name="Jozia" age={32} />
-            <Hello name= {nimi} age={ika}/>
-        </>
+        <div>{counter}</div>
     )
 }
-
 
 export default App
