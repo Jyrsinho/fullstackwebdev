@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useState} from 'react'
 
 const Button = ({onclick, text}) => {
     return (
@@ -6,13 +6,14 @@ const Button = ({onclick, text}) => {
     )
 }
 
-const Display = ({good, bad, neutral}) => {
+const Display = ({good, bad, neutral, all}) => {
     return (
         <div>
             <h2>statistics</h2>
             <p>good {good}</p>
             <p>bad {bad}</p>
             <p>neutral {neutral}</p>
+            <p>all {all}</p>
         </div>
     )
 }
@@ -21,20 +22,29 @@ const App = () => {
     const [good, setGood] = useState(0);
     const [bad, setBad] = useState(0);
     const [neutral, setNeutral] = useState(0);
+    const [all, setAll] = useState(0);
 
-    const handleButton = (func, value) => {
+
+    const handleButton = (func) => {
+
         return () => {
-            func(value + 1);
+            func(previous => previous + 1);
+            setAll(all + 1);
         }
     }
 
     return (
         <div>
             <h2>Give feedback</h2>
-            <Button onclick={handleButton(setGood, good)} text="Good" />
-            <Button onclick={handleButton(setBad, bad)} text="Bad" />
-            <Button onclick={handleButton(setNeutral, neutral)} text= "neutral" />
-            <Display good={good} bad={bad} neutral={neutral} />
+            <Button onclick={handleButton(setGood)} text="Good" />
+            <Button onclick={handleButton(setBad)} text="Bad" />
+            <Button onclick={handleButton(setNeutral)} text= "neutral" />
+            <Display
+                good={good}
+                bad={bad}
+                neutral={neutral}
+                all={all}
+            ></Display>
         </div>
   )
 }
