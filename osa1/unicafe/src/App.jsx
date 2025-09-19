@@ -6,7 +6,7 @@ const Button = ({onclick, text}) => {
     )
 }
 
-const Display = ({good, bad, neutral, all}) => {
+const Display = ({good, bad, neutral, all, average, positive}) => {
     return (
         <div>
             <h2>statistics</h2>
@@ -14,36 +14,47 @@ const Display = ({good, bad, neutral, all}) => {
             <p>bad {bad}</p>
             <p>neutral {neutral}</p>
             <p>all {all}</p>
+            <p>average {average}</p>
+            <p>positive {positive}</p>
         </div>
     )
 }
 
 const App = () => {
-    const [good, setGood] = useState(0);
-    const [bad, setBad] = useState(0);
-    const [neutral, setNeutral] = useState(0);
-    const [all, setAll] = useState(0);
+    const [state, setState] = useState({good: 0, bad: 0, neutral: 0, all: 0, average: 0, positive: 0})
 
-
-    const handleButton = (func) => {
-
+    const handleButton = (updated) => {
         return () => {
-            func(previous => previous + 1);
-            setAll(all + 1);
+            console.log(updated);
+            console.log(state[updated]);
+            console.log("state before: ",state);
+            // laskenta pitää tehdä newState muuttujassa koska state ei ehdi muuttua renderöintiä varten
+
+            // tehdään shallow copy state muuttujasta
+            const newState = {...state};
+            newState[updated] = state[updated] + 1;
+            newState["all"] = state["all"] + 1;
+            newState["average"] = ( newState["good"] - newState["bad"] ) / newState['all'];
+            newState["positive"] = newState["good"] / newState['all'];
+            console.log("updated state", newState);
+
+            setState(newState);
         }
     }
 
     return (
         <div>
             <h2>Give feedback</h2>
-            <Button onclick={handleButton(setGood)} text="Good" />
-            <Button onclick={handleButton(setBad)} text="Bad" />
-            <Button onclick={handleButton(setNeutral)} text= "neutral" />
+            <Button onclick={handleButton("good")} text="Good" />
+            <Button onclick={handleButton("bad")} text="Bad" />
+            <Button onclick={handleButton("neutral")} text= "neutral" />
             <Display
-                good={good}
-                bad={bad}
-                neutral={neutral}
-                all={all}
+                good={state.good}
+                bad={state.bad}
+                neutral={state.neutral}
+                all={state.all}
+                average = {state.average}
+                positive = {state.positive}
             ></Display>
         </div>
   )
