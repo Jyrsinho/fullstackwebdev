@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import {useState} from 'react'
 
 const Button = ({onclick, text}) => {
@@ -6,41 +8,75 @@ const Button = ({onclick, text}) => {
     )
 }
 
-const Display = ({good, bad, neutral, all, average, positive}) => {
+const StatisticsRow = ({text, value}) => {
     return (
-        <div>
-            <h2>statistics</h2>
-            <p>good {good}</p>
-            <p>bad {bad}</p>
-            <p>neutral {neutral}</p>
-            <p>all {all}</p>
-            <p>average {average}</p>
-            <p>positive {positive}</p>
-        </div>
+        <tr key={text}>
+            <td>{text}</td>
+            <td>{value}</td>
+        </tr>
     )
 }
 
+const Table = ({state}) => {
+    return (
+        <>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                {Object.entries(state).map(([key, value]) => (
+                    <StatisticsRow key= {key} text={key} value={value} />
+                ))}
+                </tbody>
+            </table>
+        </>
+    )
+}
+
+const Statistics = ({state}) => {
+    if (state.all === 0) {
+        return (
+            <div>
+                <p>No feedback given</p>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <h2>statistics</h2>
+                <Table state={state}/>
+            </div>
+        )
+    }
+}
+
 const App = () => {
-    const [state, setState] = useState({good: 0, bad: 0, neutral: 0, all: 0, average: 0, positive: 0})
+    const [state, setState] = useState({
+        good: 0,
+        bad: 0,
+        neutral: 0,
+        all: 0,
+        average: 0,
+        positive: 0
+    })
 
     const handleButton = (updated) => {
         return () => {
-            console.log(updated);
-            console.log(state[updated]);
-            console.log("state before: ",state);
-            // laskenta pitää tehdä newState muuttujassa koska state ei ehdi muuttua renderöintiä varten
+            setState((prevState) => {
+                const newState = {
+                    ...prevState,
+                    [updated]: prevState[updated] + 1,
+                    all: prevState.all + 1,
+                };
+                newState.average = (newState.good - newState.bad) / newState.all;
+                newState.positive = (newState.good / newState.all) * 100;
+                return newState;
 
-            // tehdään shallow copy state muuttujasta
-            const newState = {...state};
-            newState[updated] = state[updated] + 1;
-            newState["all"] = state["all"] + 1;
-            newState["average"] = ( newState["good"] - newState["bad"] ) / newState['all'];
-            newState["positive"] = newState["good"] / newState['all'];
-            console.log("updated state", newState);
-
-            setState(newState);
-        }
-    }
+            });
+        };
+    };
 
     return (
         <div>
@@ -48,14 +84,7 @@ const App = () => {
             <Button onclick={handleButton("good")} text="Good" />
             <Button onclick={handleButton("bad")} text="Bad" />
             <Button onclick={handleButton("neutral")} text= "neutral" />
-            <Display
-                good={state.good}
-                bad={state.bad}
-                neutral={state.neutral}
-                all={state.all}
-                average = {state.average}
-                positive = {state.positive}
-            ></Display>
+            <Statistics state={state} />
         </div>
   )
 }
