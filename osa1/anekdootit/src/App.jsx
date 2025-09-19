@@ -5,6 +5,25 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min
 }
 
+function largestIntegerIndex(array) {
+    const maxIndex = array.reduce(
+        (bestIndex, currentValue, currentIndex, array) =>
+            currentValue > array[bestIndex] ? currentIndex : bestIndex,
+        0
+    );
+    console.log("maxindex: ",maxIndex);
+    return maxIndex;
+}
+
+const Anecdote = ({selected, specification}) => {
+    return (
+        <div>
+            <h2>Anecdote {specification}</h2>
+            <p>{selected}</p>
+        </div>
+    )
+}
+
 const App = () => {
     const anecdotes = [
         'If it hurts, do it more often.',
@@ -38,11 +57,14 @@ const App = () => {
     return (
         <div>
             <div>
-                {anecdotes[selected]}
+                <Anecdote selected={anecdotes[selected]} specification={"of the day"}></Anecdote>
             </div>
             <div>
                 <Button onClick={handleVote} text="Vote" />
                 <Button onClick={selectRandomAnecdote} text={"Next Anecdote"}></Button>
+            </div>
+            <div>
+                <Anecdote selected={anecdotes[largestIntegerIndex(votes)]} specification={"with most votes"}/>
             </div>
         </div>
     )
