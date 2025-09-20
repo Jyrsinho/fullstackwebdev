@@ -6,28 +6,28 @@ const Header = (props) => {
     )
 }
 
-const Content = (props) => {
-    console.log(`Content props.parts: ${props.parts}`);
-    const parts = props.parts;
+const Content = ({parts}) => {
     return (
         <div id="content">
-            <Part content={parts[0].name} amount={parts[0].exercises} />
-            <Part content={parts[1].name} amount={parts[1].exercises} />
-            <Part content={parts[2].name} amount={parts[1].exercises} />
+            {parts.map((item) =>
+                <Part key={item.name} content ={item.name} amount={item.exercises}/>
+            )}
         </div>
     )
 }
 
-const Part = (props) => {
+const Part = ({content, amount}) => {
     return (
-        <p>{props.content} {props.amount}</p>
+        <p>{content} {amount}</p>
     )
 }
 
-const Total = (props) => {
+const Total = ({parts}) => {
+    const total = parts.reduce((acc, cur) => acc + cur.exercises, 0);
+
     return (
         <>
-            <p>Number of exercises {props.total} </p>
+            <p><strong>Number of exercises {total}</strong> </p>
         </>
     )
 }
@@ -49,15 +49,28 @@ const App = () => {
                 name: 'State of a component',
                 exercises: 14
             }
-        ]
+        ],
     }
+
     return (
         <div>
-            <Header course={course.name}/>
-            <Content parts={course.parts}/>
-            <Total total={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}/>
+            <Course course={course} />
+            <Total parts={course.parts} />
         </div>
     )
+}
+
+const Course = ({course}) => {
+    const name = course.name;
+    const parts = course.parts;
+
+    return (
+        <div>
+            <Header course={name}/>
+            <Content parts={parts} />
+        </div>
+    )
+
 }
 
 export default App
