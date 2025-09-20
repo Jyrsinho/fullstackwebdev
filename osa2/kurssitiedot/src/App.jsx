@@ -1,38 +1,4 @@
-const Header = (props) => {
-    return (
-        <div id="header">
-            <h1>{props.course}</h1>
-        </div>
-    )
-}
-
-const Content = ({parts}) => {
-    return (
-        <div id="content">
-            {parts.map((item) =>
-                <Part key={item.name} content ={item.name} amount={item.exercises}/>
-            )}
-        </div>
-    )
-}
-
-const Part = ({content, amount}) => {
-    return (
-        <p>{content} {amount}</p>
-    )
-}
-
-const Total = ({parts}) => {
-    console.log(parts)
-    const total = parts.reduce((acc, cur) => acc + cur.exercises, 0);
-
-    return (
-        <>
-            <p><strong>Number of exercises {total}</strong> </p>
-        </>
-    )
-}
-
+import Courses from './components/Courses.jsx';
 
 const App = () => {
     const courses =
@@ -75,32 +41,9 @@ const App = () => {
     return (
         <div>
             <Courses courses={courses} />
-            <Total courses= {courses} />
         </div>
     )
 }
 
-const Courses = ({courses}) =>{
-    return (
-        <div>
-            {courses.map(course =>
-                    <Course key={course.id} course={course}/>
-            )}
-        </div>
-    )
-}
-
-const Course = ({course}) => {
-    const name = course.name;
-    const parts = course.parts;
-
-    return (
-        <div>
-            <Header course={name}/>
-            <Content parts={parts} />
-        </div>
-    )
-
-}
 
 export default App
