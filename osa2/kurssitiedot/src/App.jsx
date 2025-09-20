@@ -23,6 +23,7 @@ const Part = ({content, amount}) => {
 }
 
 const Total = ({parts}) => {
+    console.log(parts)
     const total = parts.reduce((acc, cur) => acc + cur.exercises, 0);
 
     return (
@@ -34,28 +35,57 @@ const Total = ({parts}) => {
 
 
 const App = () => {
-    const course = {
-        name: 'Half Stack application development',
-        parts: [
+    const courses =
+        [   {
+            name: 'Half Stack application development',
+            id: 1,
+            parts: [
+                {
+                    name: 'Fundamentals of React',
+                    exercises: 10
+                },
+                {
+                    name: 'Using props to pass data',
+                    exercises: 7,
+                },
+                {
+                    name: 'State of a component',
+                    exercises: 14
+                }
+            ],
+        },
             {
-                name: 'Fundamentals of React',
-                exercises: 10
-            },
-            {
-                name: 'Using props to pass data',
-                exercises: 7,
-            },
-            {
-                name: 'State of a component',
-                exercises: 14
-            }
-        ],
-    }
+            name: "Node.js",
+            id:2,
+            parts: [
+                    {
+                        name: "Routing",
+                        exercises: 3,
+                        id:1
+                    },
+                    {
+                        name: 'Middlewares',
+                        exercises: 7,
+                        id:2
+                    }
+                ]
+        }
+        ]
 
     return (
         <div>
-            <Course course={course} />
-            <Total parts={course.parts} />
+            <Courses courses={courses} />
+            <Total courses= {courses} />
+        </div>
+    )
+}
+
+const Courses = ({courses}) =>{
+    return (
+        <div>
+            {courses.map(course =>
+                    <Course key={course.id} course={course}/>
+            )}
         </div>
     )
 }
