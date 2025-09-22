@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import {useEffect} from "react";
+import axios from "axios";
 import Form from './components/Form.jsx'
 import PersonList from './components/PersonList.jsx'
 import Filter from './components/Filter.jsx'
@@ -55,16 +57,22 @@ function isValidNumber(newNumber ) {
 }
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '040-123456' },
-        { name: 'Ada Lovelace', number: '39-44-5323523' },
-        { name: 'Dan Abramov', number: '12-43-234345' },
-        { name: 'Mary Poppendieck', number: '39-23-6423122' }
-    ])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('write new name here');
     const [newNumber, setNewNumber] = useState('');
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('');
+
+    useEffect(() => {
+        console.log("Efect begins")
+        axios
+            .get("http://localhost:3001/persons")
+            .then(response => {
+                console.log("Promise fulfilled")
+                setPersons(response.data);
+            })
+    }, [])
+    console.log('render', persons);
 
     const createOnChangeHandler = (setter) => (e) => setter(e.target.value)
 
