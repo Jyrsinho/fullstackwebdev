@@ -62,20 +62,15 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('');
     const [error, setError] = useState(null);
 
-    const handleChangeName = (event) => {
-        setNewName(event.target.value);
-    }
+    const createOnChangeHandler = (setter) => (e) => setter(e.target.value)
 
-    const handleChangeNumber = (event) => {
-        setNewNumber(event.target.value);
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const newError = validateForm(newName, persons, newNumber);
         setError(newError);
-        console.log("error", error);
+        console.log("error", newError);
 
         if (newError === null) {
             const newPerson = {
@@ -91,18 +86,16 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <form>
-                <div>
-                    name: <input value={newName} onChange={handleChangeName} onFocus={() => setNewName('')} />
-                </div>
-                <div>
-                    number: <input value={newNumber} onChange={handleChangeNumber} onFocus={() => setNewNumber('')} />
-                </div>
-                <div>
-                    <button type="submit" onClick={handleSubmit}>add</button>
-                </div>
-                <p>{error}</p>
-            </form>
+            <Form
+                newName={newName}
+                changeName={createOnChangeHandler(setNewName)}
+                changeNumber={createOnChangeHandler(setNewNumber)}
+                setNewName={setNewName}
+                handleSubmit={handleSubmit}
+                newNumber={newNumber}
+                setNewNumber={setNewNumber}
+                error={error}
+            />
             <h2>Numbers</h2>
             <ul>
                 {persons.map(person =>
@@ -111,7 +104,25 @@ const App = () => {
 
         </div>
     )
+}
 
+const Form = ({newName, changeName, setNewName, newNumber, setNewNumber, handleSubmit, changeNumber, error}) => {
+    return (
+        <form>
+            <div>
+                name: <input value={newName} onChange={changeName}
+                             onFocus={() => setNewName('')}/>
+            </div>
+            <div>
+                number: <input value={newNumber} onChange={changeNumber}
+                               onFocus={() => setNewNumber('')}/>
+            </div>
+            <div>
+                <button type="submit" onClick={handleSubmit}>add</button>
+            </div>
+            <p>{error}</p>
+        </form>
+    )
 }
 
 export default App
