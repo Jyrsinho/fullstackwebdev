@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Form from './components/Form.jsx'
+import PersonList from './components/PersonList.jsx'
+import Filter from './components/Filter.jsx'
 
 /**
  * Validates the given form inputs and returns possible error. If there is no error,
@@ -61,9 +64,9 @@ const App = () => {
     const [newName, setNewName] = useState('write new name here');
     const [newNumber, setNewNumber] = useState('');
     const [error, setError] = useState(null);
+    const [filter, setFilter] = useState('');
 
     const createOnChangeHandler = (setter) => (e) => setter(e.target.value)
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -86,6 +89,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Filter setFilter={setFilter} />
             <Form
                 newName={newName}
                 changeName={createOnChangeHandler(setNewName)}
@@ -94,34 +98,11 @@ const App = () => {
                 handleSubmit={handleSubmit}
                 newNumber={newNumber}
                 setNewNumber={setNewNumber}
-                error={error}
-            />
+                error={error}>
+            </Form>
             <h2>Numbers</h2>
-            <ul>
-                {persons.map(person =>
-                <li key={person.name}>{person.name}: {person.number}</li>)}
-            </ul>
-
+            <PersonList persons={persons} filter={filter} />
         </div>
-    )
-}
-
-const Form = ({newName, changeName, setNewName, newNumber, setNewNumber, handleSubmit, changeNumber, error}) => {
-    return (
-        <form>
-            <div>
-                name: <input value={newName} onChange={changeName}
-                             onFocus={() => setNewName('')}/>
-            </div>
-            <div>
-                number: <input value={newNumber} onChange={changeNumber}
-                               onFocus={() => setNewNumber('')}/>
-            </div>
-            <div>
-                <button type="submit" onClick={handleSubmit}>add</button>
-            </div>
-            <p>{error}</p>
-        </form>
     )
 }
 
