@@ -44,11 +44,15 @@ const App = () => {
     }
 
     const deletePerson = personId => {
-        console.log(`We should now delete person with id ${personId}`);
-        personService.remove(personId)
-            .then(() => {
-                setPersons(persons.filter((person) => person.id !== personId))
-            })
+        {if (window.confirm('Are you sure you want to delete this person?')) {
+            console.log(`We should now delete person with id ${personId}`);
+            personService.remove(personId)
+                .then(() => {
+                    setPersons(persons.filter((person) => person.id !== personId))
+                })
+        } else {
+        console.log("Glad you didnt want to delete that person.")}
+        }
     }
 
     return (
