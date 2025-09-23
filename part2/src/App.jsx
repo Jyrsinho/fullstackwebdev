@@ -1,14 +1,22 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import Note from "./components/Note.jsx";
 import AddNote from "./components/AddNote.jsx";
-
+import axios from 'axios'
 
 function App(props) {
     const [notes, setNotes] = useState(props.notes);
     const [newNote, setNewNote] = useState("a new note");
     const [showAll, setShowAll] = useState(true);
 
-    notes.map(note => <li>{note.content}</li>)
+    useEffect(() => {
+        console.log('effect');
+        axios.get(`http://localhost:3001/notes`)
+        .then(response => {
+            console.log('promise fulfilled');
+            setNotes(response.data);
+        })
+    }, []);
+    console.log(`render ${notes.length} notes`);
 
     const handleSubmit= (event) => {
         event.preventDefault()
@@ -17,8 +25,24 @@ function App(props) {
             important: Math.random() > 0.5,
             id: String(notes.length + 1)
         }
-        setNotes(notes.concat(noteObject));
-        setNewNote('')
+        axios
+            .post('http://localhost:3001/notes', noteObject)
+            .then(response => {
+                console.log(response);
+                setNotes(notes.concat(response.data));
+                setNewNote("");
+            })
+    }
+
+    const toggleImportanceOf = (id) => {
+        const url = `http://localhost:3001/notes/${id}`;
+        const note = notes.find((note) => note.id === id);
+        const changedNote = { ...note, important: !note.important };
+
+        axios.put(url, changedNote)
+            .then(response => {
+                setNotes(notes.map((note) => (note.id !== id) ? note : response.data ));
+            })
     }
 
     // newNote muuttujan käsittely on sidottu tähän tapahtumankäsittelijään
@@ -41,7 +65,7 @@ function App(props) {
             </div>
             <ul>
                 {notesToShow.map(note =>
-                    <Note key={note.id} note={note.content} />
+                    <Note key={note.id} note={note} toggleImportanceOf={toggleImportanceOf} />
                 )}
             </ul>
             <AddNote onChange={handleNoteChange} onSubmit = {handleSubmit} input_value={newNote}/>
