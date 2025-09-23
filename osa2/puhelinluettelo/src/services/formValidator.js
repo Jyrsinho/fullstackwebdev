@@ -1,49 +1,59 @@
 /**
- * Validates the given form inputs and returns possible error. If there is no error,
- * returns null.
+ * Validates the given form inputs and returns Object with fields message and code. If there is no error,
+ * error code is 0 and message string is empty. Code 1 indicates that there is an issue with the name input.
+ * Code 2 indicates that there is an issue with number input. Code 3 indicates that the user has given a
+ * name that already exists with new number.
  * @param newName
  * @param persons
  * @param newNumber
  */
 function validateForm(newName, persons, newNumber) {
-    let error = isValidName(newName, persons);
-    if (error !== null) return error;
-    error = isValidNumber(newNumber)
-    if (error !== null) return error;
-    return error;
+    let error = {
+        code: 0,
+        message: ""
+    }
 
-}
-
-function isValidName(newName, persons) {
     const names = persons.map(person => person.name.toLowerCase());
 
     if (newName === "write new name here") {
-        return("Add a new name, please");
-
+        error.message = "Add a new name, please";
+        error.code = 1;
+        return error;
     }
 
     if (newName.trim() === '') {
-        return ('New name cannot be empty string');
+
+        error.message = ('New name cannot be empty string');
+        error.code = 1;
+        return error;
     }
 
-    if (names.includes(newName.trim().toLowerCase())) {
-        return (`${newName} already exist`);
-    }
-
-    return null;
-}
-
-function isValidNumber(newNumber ) {
     if (newNumber.trim().length < 1) {
-        return("Number cannot be empty")
+        error.code = 2;
+        error.message = ("Number cannot be empty");
+        return error;
     }
 
     const allowed = /^[0-9 -]+$/;
     if (!allowed.test(newNumber)) {
-        return ("Invalid number");
+        error.code = 2;
+        error.message = ("Invalid number");
+        return error;
     }
 
-    return null;
+    if (names.includes(newName.trim().toLowerCase()) && newNumber.trim().length < 1) {
+        error.code = 1;
+        error.message = ("Given name already exists");
+        return error
+    }
+
+    if (names.includes(newName.trim().toLowerCase()) && newNumber.trim().length > 1) {
+        error.code = 3;
+        error.message = ("Given name already exists");
+        return error;
+    }
+
+    return error;
 }
 
 export default validateForm

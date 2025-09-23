@@ -27,9 +27,20 @@ const App = () => {
         e.preventDefault();
 
         const newError = validateForm(newName, persons, newNumber);
-        setError(newError);
 
-        if (newError === null) {
+        if (newError.code === 3) {
+            if (window.confirm("This name already exists. Replace old number?")) {
+                console.log("Now we should go and set new number to person")
+                personToUpdate =
+
+                // annetaan personservicelle id ja sanotaan että tunge sinne tämä uusi numero
+                personService.update(person.id, newNumber)
+
+            } else{
+                setError(newError.message);
+            }
+        }
+        else if (newError.code === 0) {
             const newPerson = {
                 name: newName.trim(),
                 number: newNumber,
@@ -40,6 +51,9 @@ const App = () => {
                     setNewName('');
                     setNewNumber('');
                 })
+        }
+         else  {
+            setError(newError.message);
         }
     }
 
