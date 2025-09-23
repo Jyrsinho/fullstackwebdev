@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": "2"
@@ -21,14 +16,9 @@
       "id": "4"
     },
     {
-      "id": "1f4a",
-      "name": "Sami Heinonen",
-      "number": "0500"
-    },
-    {
-      "id": "0422",
-      "name": "Tommi Pommi",
-      "number": "0700"
+      "id": "02df",
+      "name": "Kalle",
+      "number": "0400"
     }
   ]
 }

@@ -43,6 +43,14 @@ const App = () => {
         }
     }
 
+    const deletePerson = personId => {
+        console.log(`We should now delete person with id ${personId}`);
+        personService.remove(personId)
+            .then(() => {
+                setPersons(persons.filter((person) => person.id !== personId))
+            })
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
@@ -58,7 +66,7 @@ const App = () => {
                 error={error}>
             </Form>
             <h2>Numbers</h2>
-            <PersonList persons={persons} filter={filter} />
+            <PersonList persons={persons} filter={filter} deletePerson={deletePerson} />
         </div>
     )
 }
