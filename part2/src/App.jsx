@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import Note from "./components/Note.jsx";
 import AddNote from "./components/AddNote.jsx";
+import noteService from "./services/notes.js";
 import axios from 'axios'
 
 function App(props) {
@@ -10,12 +11,13 @@ function App(props) {
 
     useEffect(() => {
         console.log('effect');
-        axios.get(`http://localhost:3001/notes`)
-        .then(response => {
-            console.log('promise fulfilled');
-            setNotes(response.data);
-        })
-    }, []);
+        noteService.
+        getAll()
+            .then(initialNotes=> {
+                console.log('promise fulfilled');
+                setNotes(initialNotes);
+            })
+        },[])
     console.log(`render ${notes.length} notes`);
 
     const handleSubmit= (event) => {
@@ -25,12 +27,10 @@ function App(props) {
             important: Math.random() > 0.5,
             id: String(notes.length + 1)
         }
-        axios
-            .post('http://localhost:3001/notes', noteObject)
-            .then(response => {
-                console.log(response);
-                setNotes(notes.concat(response.data));
-                setNewNote("");
+        noteService.create(noteObject)
+            .then(createdNote => {
+                setNotes(notes.concat(createdNote));
+                setNewNote("")
             })
     }
 
@@ -39,9 +39,13 @@ function App(props) {
         const note = notes.find((note) => note.id === id);
         const changedNote = { ...note, important: !note.important };
 
-        axios.put(url, changedNote)
-            .then(response => {
-                setNotes(notes.map((note) => (note.id !== id) ? note : response.data ));
+        noteService.update(id, changedNote)
+            .then(changedNote=> {
+                setNotes(notes.map((note) => (note.id !== id) ? note : changedNote));
+            })
+            .catch(e => {
+                alert(`The note with id ${id} was already deleted from the server`);
+                setNotes(notes.filter((note) => (note.id !== id)));
             })
     }
 
