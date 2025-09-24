@@ -31,10 +31,19 @@ const App = () => {
         if (newError.code === 3) {
             if (window.confirm("This name already exists. Replace old number?")) {
                 console.log("Now we should go and set new number to person")
-                personToUpdate =
+                const personToUpdate = persons.find( (person) => person.name.trim().toLowerCase() === newName.trim().toLowerCase())
+                const updatedPerson = {
+                    ...personToUpdate,
+                    number: newNumber,
+                }
 
                 // annetaan personservicelle id ja sanotaan että tunge sinne tämä uusi numero
-                personService.update(person.id, newNumber)
+                personService.update(updatedPerson.id, updatedPerson)
+                    .then(updatedPerson => {
+                        setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
+                        setNewName('');
+                        setNewNumber('');
+                    })
 
             } else{
                 setError(newError.message);
