@@ -1,9 +1,20 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
+import Form from './components/Form'
+import Notifications from './components/Notifications'
 
 function App() {
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/countries')
+            .then(res => {
+
+            })
+    })
+
     return (
         <div>
-            Hello world!
+            <Form></Form>
+            <Notifications></Notifications>
         </div>
   )
 }
