@@ -4,6 +4,7 @@ import personService from "./services/persons.js";
 import validateForm from  "./services/formValidator.js";
 
 import Form from './components/Form.jsx'
+import Notification from "./components/Notification.jsx"
 import PersonList from './components/PersonList.jsx'
 import Filter from './components/Filter.jsx'
 
@@ -11,7 +12,7 @@ const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('write new name here');
     const [newNumber, setNewNumber] = useState('');
-    const [error, setError] = useState(null);
+    const [submissionStatus, setsubmissionStatus] = useState(null);
     const [filter, setFilter] = useState('');
 
     useEffect(() => {
@@ -26,30 +27,32 @@ const App = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const newError = validateForm(newName, persons, newNumber);
+        const newSubmissionStatus = validateForm(newName, persons, newNumber);
 
-        if (newError.code === 3) {
+        if (newSubmissionStatus.code === 3) {
             if (window.confirm("This name already exists. Replace old number?")) {
-                console.log("Now we should go and set new number to person")
                 const personToUpdate = persons.find( (person) => person.name.trim().toLowerCase() === newName.trim().toLowerCase())
                 const updatedPerson = {
                     ...personToUpdate,
                     number: newNumber,
                 }
 
-                // annetaan personservicelle id ja sanotaan että tunge sinne tämä uusi numero
                 personService.update(updatedPerson.id, updatedPerson)
                     .then(updatedPerson => {
                         setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
                         setNewName('');
                         setNewNumber('');
+                        setsubmissionStatus({
+                            code: 0,
+                            message: `succesfully updated ${updatedPerson.name}`
+                        })
                     })
 
             } else{
-                setError(newError.message);
+                setsubmissionStatus(newSubmissionStatus);
             }
         }
-        else if (newError.code === 0) {
+        else if (newSubmissionStatus.code === 0) {
             const newPerson = {
                 name: newName.trim(),
                 number: newNumber,
@@ -59,24 +62,24 @@ const App = () => {
                     setPersons(persons.concat([newPerson]))
                     setNewName('');
                     setNewNumber('');
+                    setsubmissionStatus({
+                        message: `Succesfully created ${newPerson.name} ${newPerson.number}`,
+                        code: 0
+                    })
                 })
-        }
-         else  {
-            setError(newError.message);
+        } else  {
+            setsubmissionStatus(newSubmissionStatus);
         }
     }
 
     const deletePerson = personId => {
         {if (window.confirm('Are you sure you want to delete this person?')) {
-            console.log(`We should now delete person with id ${personId}`);
             personService.remove(personId)
                 .then(() => {
                     setPersons(persons.filter((person) => person.id !== personId))
                 })
         } else {
-        console.log("Glad you didnt want to delete that person.")}
-        }
-    }
+        }}}
 
     return (
         <div>
@@ -89,9 +92,9 @@ const App = () => {
                 setNewName={setNewName}
                 handleSubmit={handleSubmit}
                 newNumber={newNumber}
-                setNewNumber={setNewNumber}
-                error={error}>
+                setNewNumber={setNewNumber}>
             </Form>
+            <Notification submissionStatus={submissionStatus} />
             <h2>Numbers</h2>
             <PersonList persons={persons} filter={filter} deletePerson={deletePerson} />
         </div>

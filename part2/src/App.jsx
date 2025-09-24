@@ -1,12 +1,16 @@
 import {useEffect, useState} from 'react'
 import Note from "./components/Note.jsx";
 import AddNote from "./components/AddNote.jsx";
+import Footer from "./components/Footer.jsx";
 import noteService from "./services/notes.js";
+import Notification from "./components/Notification.jsx";
+
 
 function App(props) {
     const [notes, setNotes] = useState(props.notes);
     const [newNote, setNewNote] = useState("a new note");
     const [showAll, setShowAll] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         console.log('effect');
@@ -34,7 +38,6 @@ function App(props) {
     }
 
     const toggleImportanceOf = (id) => {
-        const url = `http://localhost:3001/notes/${id}`;
         const note = notes.find((note) => note.id === id);
         const changedNote = { ...note, important: !note.important };
 
@@ -43,7 +46,10 @@ function App(props) {
                 setNotes(notes.map((note) => (note.id !== id) ? note : changedNote));
             })
             .catch(e => {
-                alert(`The note with id ${id} was already deleted from the server`);
+                setError(`The note with id ${id} was already deleted from the server`);
+                setTimeout(() => {
+                    setError(null);
+                }, 500);
                 setNotes(notes.filter((note) => (note.id !== id)));
             })
     }
@@ -71,7 +77,9 @@ function App(props) {
                     <Note key={note.id} note={note} toggleImportanceOf={toggleImportanceOf} />
                 )}
             </ul>
+            <Notification error={error}></Notification>
             <AddNote onChange={handleNoteChange} onSubmit = {handleSubmit} input_value={newNote}/>
+            <Footer></Footer>
         </div>
     )
 }
