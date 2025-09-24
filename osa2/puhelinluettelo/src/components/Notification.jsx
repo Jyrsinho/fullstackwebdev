@@ -1,11 +1,15 @@
 const Notification = ({submissionStatus}) => {
 
     const errorStyle = {
+        display: 'block',
+        border: '1px solid black',
         color: 'red',
         fontStyle: 'italic'
     }
 
     const successStyle = {
+        display: 'block',
+        border: '1px solid black',
         color: 'green',
         fontStyle: 'bold'
     }

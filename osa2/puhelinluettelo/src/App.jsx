@@ -36,7 +36,6 @@ const App = () => {
                     ...personToUpdate,
                     number: newNumber,
                 }
-
                 personService.update(updatedPerson.id, updatedPerson)
                     .then(updatedPerson => {
                         setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
@@ -46,13 +45,14 @@ const App = () => {
                             code: 0,
                             message: `succesfully updated ${updatedPerson.name}`
                         })
-                    })
-
-            } else{
-                setsubmissionStatus(newSubmissionStatus);
-            }
-        }
-        else if (newSubmissionStatus.code === 0) {
+                    }).catch(error => {
+                        console.log(error);
+                        setsubmissionStatus({
+                            code: 4,
+                            message: `Information of ${updatedPerson.name} has already been deleted.`
+                        })
+                })}
+        } else if (newSubmissionStatus.code === 0) {
             const newPerson = {
                 name: newName.trim(),
                 number: newNumber,
