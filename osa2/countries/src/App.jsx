@@ -51,7 +51,7 @@ function App() {
                 onChange={handleCountryChange}
             ></Form>
             <Notifications notification={notification} />
-            <Countries countries={countries} search={search} />
+            <Countries countries={countries} search={search} setCountry={setCountry} />
             <Country country={country} />
         </div>
   )
