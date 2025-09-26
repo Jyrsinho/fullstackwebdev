@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const phoneNumbers = [
+let phoneNumbers = [
             {
                 "name": "Dan Abramov",
                 "number": "12-43-234345",
@@ -48,6 +48,23 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/phoneNumbers', (req, res) => {
+    res.send(phoneNumbers);
+})
+
+
+app.get('/phoneNumbers/:id', (req, res) => {
+    const id = req.params.id;
+    const phoneNumber = phoneNumbers.find(phoneNumber => phoneNumber.id === id);
+
+    if (!phoneNumber) {
+        res.status(404).send('Given ID Not Found');
+    }
+
+    res.send(phoneNumber);
+})
+
+
 app.get('/info', (req, res) => {
     const info = `
     <div>
@@ -55,6 +72,14 @@ app.get('/info', (req, res) => {
         <p>${Date.now()}</p>
     `;
     res.send(info);
+})
+
+app.delete('/phoneNumbers/:id', (req, res) => {
+    const id = req.params.id;
+
+    phoneNumbers = phoneNumbers.filter(phoneNumber => phoneNumber.id !== id);
+    res.status(204).end();
+
 })
 
 const Port = 3001;
