@@ -1,7 +1,7 @@
 const Country = ({ country }) => {
     const flagStyle = {
-        width: '100%',
-        height: '100%',
+        width: '50%',
+        height: '50%',
     }
 
     if (!country) {

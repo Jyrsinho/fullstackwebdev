@@ -4,6 +4,7 @@ import Notifications from './components/Notifications'
 import Countries from "./components/CountryDisplay.jsx";
 import Country   from "./components/Country.jsx";
 import countryService from "./services/countryService.js";
+import Weather from "./components/Weather.jsx";
 
 function App() {
     const [search, setSearch] = useState(null);
@@ -53,6 +54,7 @@ function App() {
             <Notifications notification={notification} />
             <Countries countries={countries} search={search} setCountry={setCountry} />
             <Country country={country} />
+            <Weather country={country} />
         </div>
   )
 }
