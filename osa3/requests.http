@@ -1,8 +1,15 @@
 ###
-GET {{baseURL}}/
+GET {{baseURL}}
 
 ###
 DELETE {{baseURL}}/3
 
 ###
-GET {{baseURL}}/
+POST {{baseURL}}
+Content-Type: application/json
+
+{
+  "name": "Testi Testinen",
+  "number": "0500500"
+}
+
