@@ -1,5 +1,9 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
+
+app.use(express.json());
+app.use(morgan('tiny'));
 
 let persons = [
             {
@@ -41,7 +45,6 @@ let persons = [
 
 
 
-app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send(persons);
@@ -75,16 +78,13 @@ app.get('/info', (req, res) => {
 })
 
 app.post("/phoneNumbers", (request, response) => {
-    console.log("persons prePost", persons);
     const body = request.body;
-    console.log("request body", request.body)
 
     if (!body.name || !body.number) {
         return response.status(400).send('Content is missing');
     }
 
     if (persons.find(phoneNumber => phoneNumber.name === body.name)) {
-        console.log("Given name is already in use.");
         return response.status(400).send({
             error: 'Given name is already in use'
         });
@@ -97,7 +97,6 @@ app.post("/phoneNumbers", (request, response) => {
     }
 
     persons = persons.concat([person]);
-    console.log("persons postPost", persons);
     response.json(person);
 })
 
@@ -115,4 +114,3 @@ const generateID = () => {
 
 const Port = 3001;
 app.listen(Port)
-console.log(`Server running on port ${Port}`)
