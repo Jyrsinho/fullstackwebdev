@@ -1,0 +1,15 @@
+
+###
+GET {{baseUrl}}
+
+###
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "content": "Buy sour Milk when programmming",
+    "important": false
+}
+
+###
+GET {{baseUrl}}
