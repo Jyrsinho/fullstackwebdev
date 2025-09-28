@@ -22,6 +22,7 @@ let notes = [
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static('dist'));
 
 
 app.get('/', (request, response) => {
@@ -76,7 +77,7 @@ app.delete('/api/notes/:id', (request, response) => {
 })
 
 
-const Port = 3001;
+const Port = process.env.PORT || 3001;
 app.listen(Port)
 console.log(`Server running on port ${Port}`)
 
