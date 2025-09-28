@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 let notes = [
     {
@@ -20,6 +21,7 @@ let notes = [
     ]
 
 app.use(express.json());
+app.use(cors());
 
 
 app.get('/', (request, response) => {
