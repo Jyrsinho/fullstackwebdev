@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const app = express();
 const cors = require('cors');
 
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(cors());
 morgan.token('body', (req) => JSON.stringify(req.body));
@@ -46,13 +47,6 @@ let persons = [
             }
 ]
 
-
-
-
-app.get('/', (req, res) => {
-    res.send(persons);
-
-})
 
 app.get('/phoneNumbers', (req, res) => {
     res.send(persons);
