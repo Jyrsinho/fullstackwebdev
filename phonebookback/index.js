@@ -46,12 +46,12 @@ let persons = [
 ]
 
 
-app.get('/phoneNumbers', (req, res) => {
+app.get('/api/phoneNumbers', (req, res) => {
     res.send(persons);
 })
 
 
-app.get('/phoneNumbers/:id', (req, res) => {
+app.get('/api/phoneNumbers/:id', (req, res) => {
     const id = req.params.id;
     const phoneNumber = persons.find(phoneNumber => phoneNumber.id === id);
 
@@ -63,7 +63,7 @@ app.get('/phoneNumbers/:id', (req, res) => {
 })
 
 
-app.get('/info', (req, res) => {
+app.get('/api/info', (req, res) => {
     const info = `
     <div>
         <p>Phonebook has info for ${persons.length} people.</p>
@@ -72,7 +72,7 @@ app.get('/info', (req, res) => {
     res.send(info);
 })
 
-app.post("/phoneNumbers", (request, response) => {
+app.post("/api/phoneNumbers", (request, response) => {
     const body = request.body;
 
     if (!body.name || !body.number) {
@@ -95,7 +95,7 @@ app.post("/phoneNumbers", (request, response) => {
     response.json(person);
 })
 
-app.delete('/phoneNumbers/:id', (req, res) => {
+app.delete('/api/phoneNumbers/:id', (req, res) => {
     const id = req.params.id;
 
     persons = persons.filter(phoneNumber => phoneNumber.id !== id);
