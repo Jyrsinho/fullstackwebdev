@@ -1,13 +1,12 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const {mongo} = require("mongoose");
 
-const password = process.argv[2];
-const dbName = "phonebook";
 const url = process.env.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
 
 console.log('connecting to db...')
+console.log("url", url)
 mongoose.connect(url)
     .then(() => console.log('Connected to db...'))
     .catch(err => {

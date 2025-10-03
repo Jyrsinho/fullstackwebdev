@@ -19,6 +19,7 @@ const App = () => {
         personService.getAll()
             .then(initialPersons => {
                 setPersons(initialPersons);
+                console.log("initialPersons", initialPersons)
             })
     }, [])
 

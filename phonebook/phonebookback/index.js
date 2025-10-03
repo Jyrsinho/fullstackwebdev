@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-const Person = require("./models/person");
+const Person = require("./models/person.js");
 
 app.use(express.static('dist'));
 app.use(express.json());
@@ -73,6 +74,6 @@ const generateID = () => {
     return Math.floor(Math.random() * 1000000);
 }
 
-const Port = 3001;
+const Port = process.env.PORT || 3001;
 app.listen(Port)
 console.log("Listening on port " + Port);
