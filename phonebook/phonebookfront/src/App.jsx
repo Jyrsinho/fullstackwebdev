@@ -21,6 +21,9 @@ const App = () => {
                 setPersons(initialPersons);
                 console.log("initialPersons", initialPersons)
             })
+            .catch(error => {
+                console.log("error in fetching phonebook", error);
+            })
     }, [])
 
     const createOnChangeHandler = (setter) => (e) => setter(e.target.value)
