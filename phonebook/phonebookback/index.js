@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const Person = require("./models/person.js");
+const mongoose = require("mongoose");
 
 app.use(express.static('dist'));
 app.use(express.json());
@@ -46,20 +47,17 @@ app.post("/api/phoneNumbers", (request, response) => {
         return response.status(400).send('Content is missing');
     }
 
-    if (persons.find(phoneNumber => phoneNumber.name === body.name)) {
-        return response.status(400).send({
-            error: 'Given name is already in use'
-        });
-    }
-
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateID(),
-    }
+    })
 
-    persons = persons.concat([person]);
-    response.json(person);
+    console.log("Creating new person to DB", person)
+    person.save()
+        .then(savedperson=> {
+            console.log('person saved!')
+            response.json(savedperson);
+    })
 })
 
 app.delete('/api/phoneNumbers/:id', (req, res) => {
@@ -70,9 +68,6 @@ app.delete('/api/phoneNumbers/:id', (req, res) => {
 
 })
 
-const generateID = () => {
-    return Math.floor(Math.random() * 1000000);
-}
 
 const Port = process.env.PORT || 3001;
 app.listen(Port)
