@@ -102,6 +102,11 @@ app.put("/api/phoneNumbers/:id", (request, response, next) => {
             person.name = name;
             person.number = number;
             console.log("Person updated!", person);
+
+            return person.save()
+                .then(savedperson=> {
+                    response.json(savedperson);
+            })
         } else {
             return response.status(404).send({error: "person not found"});
         }
