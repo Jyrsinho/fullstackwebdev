@@ -19,3 +19,12 @@ Content-Type: application/json
 ###
 DELETE {{baseURL}}/68e2b858c9bfe9bd0b173dbe
 
+###
+PUT {{baseURL}}/68dd5c5970d79ac9ddf2715c
+Content-Type: application/json
+
+{
+  "name": "Jyri Huhtala",
+  "number": "0400123123"
+}
+

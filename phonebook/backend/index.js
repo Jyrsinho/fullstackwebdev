@@ -92,6 +92,23 @@ app.post("/api/phoneNumbers", (request, response, next) => {
 })
 
 
+app.put("/api/phoneNumbers/:id", (request, response, next) => {
+    const {name, number} = request.body;
+    const id = request.params.id;
+    Person.findById(id)
+    .then((person) => {
+        if (person) {
+            console.log("modified person", person)
+            person.name = name;
+            person.number = number;
+            console.log("Person updated!", person);
+        } else {
+            return response.status(404).send({error: "person not found"});
+        }
+    }).catch((error) => {next(error)})
+})
+
+
 app.delete('/api/phoneNumbers/:id', (request, response, next) => {
     const id = request.params.id;
     Person.findByIdAndDelete(id)
