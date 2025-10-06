@@ -3,7 +3,6 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const Person = require("./models/person.js");
-const {response} = require("express");
 
 
 app.use(express.static('dist'));
@@ -58,15 +57,20 @@ app.get('/api/phoneNumbers/:id', (req, res, next) => {
 
 
 app.get('/api/info', (req, res) => {
-    const info = `
+    Person.find({})
+        .then((people) => {
+            const info = `
     <div>
-        <p>Phonebook has info for ${persons.length} people.</p>
-        <p>${Date.now()}</p>
+        <p>Phonebook has info for ${people.length} people.</p>
+        <p>${new Date()}</p>
+    </div>
     `;
-    res.send(info);
+            res.send(info);
+        })
 })
 
-app.post("/api/phoneNumbers", (request, response) => {
+
+app.post("/api/phoneNumbers", (request, response, next) => {
     const body = request.body;
 
     if (!body.name || !body.number) {
@@ -84,7 +88,9 @@ app.post("/api/phoneNumbers", (request, response) => {
             console.log('person saved!')
             response.json(savedperson);
     })
+    .catch((error) => {next(error)})
 })
+
 
 app.delete('/api/phoneNumbers/:id', (request, response, next) => {
     const id = request.params.id;
