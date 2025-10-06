@@ -3,9 +3,18 @@ const express = require('express');
 const app = express();
 const Note = require('./models/note.js');
 
-app.use(express.json());
 app.use(express.static('dist'));
+app.use(express.json());
 
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+}
+
+app.use(requestLogger);
 
 app.get('/api/notes', (request, response) => {
     Note.find({}).then(notes => {
@@ -46,11 +55,12 @@ app.post('/api/notes', (request, response) => {
 })
 
 
-app.delete('/api/notes/:id', (request, response) => {
-    const id = request.params.id;
-    notes = notes.filter(note => note.id !== id);
-
-    response.status(204).end();
+app.delete('/api/notes/:id', (request, response, next) => {
+    Note.findByIdAndDelete(request.params.id)
+    .then(result => {
+        response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 
@@ -58,6 +68,10 @@ const Port = process.env.PORT || 3001;
 app.listen(Port)
 console.log(`Server running on port ${Port}`)
 
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
@@ -71,3 +85,4 @@ const errorHandler = (error, request, response, next) => {
 
 // tämä tulee kaikkien muiden middlewarejen ja routejen rekisteröinnin jälkeen!
 app.use(errorHandler)
+app.use(unknownEndpoint)

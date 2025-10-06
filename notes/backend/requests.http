@@ -13,3 +13,6 @@ Content-Type: application/json
 
 ###
 GET {{baseUrl}}
+
+###
+DELETE {{baseUrl}}/68dd4e77856b96e9fc4f1823
