@@ -19,26 +19,41 @@ const requestLogger = (request, response, next) => {
     next()
 }
 
+const errorHandler = (error, request, response, next) => {
+    console.log(error.message);
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({error: "malformatted id"});
+    }
+
+    next(error)
+}
+
 app.use(requestLogger);
 
 
-app.get('/api/phoneNumbers', (req, res) => {
+app.get('/api/phoneNumbers', (req, res, next) => {
     Person.find({})
         .then((people) => {
             res.json(people);
     })
+        .catch((error) => {next(error)})
 })
 
 
-app.get('/api/phoneNumbers/:id', (req, res) => {
+app.get('/api/phoneNumbers/:id', (req, res, next) => {
     const id = req.params.id;
-    const phoneNumber = persons.find(phoneNumber => phoneNumber.id === id);
-
-    if (!phoneNumber) {
-        res.status(404).send('Given ID Not Found');
-    }
-
-    res.send(phoneNumber);
+    Person.findById(id)
+    .then((person) => {
+        if (person) {
+            res.json(person);
+        } else {
+            res.status(404).end()
+        }
+    })
+        .catch((error) => {
+            next(error)
+        })
 })
 
 
@@ -90,15 +105,7 @@ const unknownEndPoint = (request, response) => {
     response.status(404).send('unknown endpoint');
 }
 
-const errorHandler = (error, request, response, next) => {
-    console.log(error.message);
 
-    if (error.name === 'CastError') {
-        return response.status(400).send({error: "malformatted id"});
-    }
-
-    next(error)
-}
 
 app.use(errorHandler);
 
