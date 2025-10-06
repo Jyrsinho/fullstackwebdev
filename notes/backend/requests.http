@@ -16,3 +16,16 @@ GET {{baseUrl}}
 
 ###
 DELETE {{baseUrl}}/68dd4e77856b96e9fc4f1823
+
+###
+DELETE {{baseUrl}}/68dd4e77856b96e9fc4f1823A
+
+
+###
+PUT {{baseUrl}}/68dd53d1ba5021ac348edbb9
+Content-Type: application/json
+
+{
+  "content": "CSS is hard!",
+  "important": true
+}
