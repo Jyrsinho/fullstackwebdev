@@ -1,3 +1,4 @@
 node_modules
 ./phonebook/.env
 /phonebook/backend/dist/
+./notes/backend/.env

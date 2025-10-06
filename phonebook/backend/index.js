@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const Person = require("./models/person.js");
-const mongoose = require("mongoose");
+
 
 app.use(express.static('dist'));
 app.use(express.json());
