@@ -13,3 +13,6 @@ Content-Type: application/json
   "number": "0500500"
 }
 
+###
+DELETE {{baseURL}}/68e2b858c9bfe9bd0b173dbe
+

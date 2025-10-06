@@ -101,5 +101,5 @@ const errorHandler = (error, request, response, next) => {
 }
 
 // tämä tulee kaikkien muiden middlewarejen ja routejen rekisteröinnin jälkeen!
-app.use(errorHandler)
 app.use(unknownEndpoint)
+app.use(errorHandler)
