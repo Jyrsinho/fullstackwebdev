@@ -62,14 +62,22 @@ const App = () => {
                 number: newNumber,
             }
             personService.create(newPerson)
+                //TODO TÄMÄ MENEE NYT VÄÄRIN. PITÄÄ OTTAA TÄSSÄ CATCH VARMAANKIN EIKÄ .THEN
                 .then(newPerson => {
-                    setPersons(persons.concat([newPerson]))
-                    setNewName('');
-                    setNewNumber('');
-                    setsubmissionStatus({
-                        message: `Succesfully created ${newPerson.name} ${newPerson.number}`,
-                        code: 0
-                    })
+                    console.log(newPerson)
+                    if (newPerson.error) {
+                        setsubmissionStatus({
+                            message: newPerson.error,
+                        })
+                    }else {
+                        setPersons(persons.concat([newPerson]))
+                        setNewName('');
+                        setNewNumber('');
+                        setsubmissionStatus({
+                            message: `Succesfully created ${newPerson.name} ${newPerson.number}`,
+                            code: 0
+                        })
+                    }
                 })
         } else  {
             setsubmissionStatus(newSubmissionStatus);
